@@ -4,6 +4,7 @@ import com.itmo.traveltalk.entity.Location;
 import com.itmo.traveltalk.repository.LocationRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,5 +23,13 @@ public class LocationService {
 
     public Location save(Location location) {
         return locationRepository.saveAndFlush(location);
+    }
+
+    public List<Location> getAll() {
+        return locationRepository.findAll();
+    }
+
+    public Optional<Location> findByName(String name) {
+        return locationRepository.findByName(name);
     }
 }

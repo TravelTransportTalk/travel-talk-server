@@ -1,10 +1,10 @@
 package com.itmo.traveltalk.service;
 
-import com.itmo.traveltalk.entity.Location;
 import com.itmo.traveltalk.entity.Transport;
 import com.itmo.traveltalk.repository.TransportRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,5 +23,13 @@ public class TransportService {
 
     public Transport save(Transport transport) {
         return transportRepository.saveAndFlush(transport);
+    }
+
+    public List<Transport> getAll() {
+        return transportRepository.findAll();
+    }
+
+    public Optional<Transport> findByName(String name) {
+        return transportRepository.findByName(name);
     }
 }
