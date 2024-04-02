@@ -1,6 +1,7 @@
 package com.itmo.traveltalk.controller;
 
 import com.itmo.traveltalk.dto.AuthUserRequest;
+import com.itmo.traveltalk.dto.ChangeUserRequest;
 import com.itmo.traveltalk.dto.RegisterUserRequest;
 import com.itmo.traveltalk.dto.UserControllerResp;
 import com.itmo.traveltalk.entity.User;
@@ -53,5 +54,35 @@ public class UserController {
         return user.map(value -> new ResponseEntity<>(new UserControllerResp("User is found", value), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(new UserControllerResp("User with this tgId was not found"), HttpStatus.NOT_FOUND));
 
+    }
+
+    @PostMapping("/change")
+    public ResponseEntity<UserControllerResp> changeUserInfo(@RequestBody ChangeUserRequest request) {
+        Optional<User> userOptional = userService.findUserByTgId(request.getTgId());
+
+        if (userOptional.isEmpty()) {
+            return new ResponseEntity<>(new UserControllerResp("User with this tgId was not found"), HttpStatus.NOT_FOUND);
+        }
+
+        User user = userOptional.get();
+
+        if (isNotEmpty(request.getFullName())) {
+            user.setFullName(request.getFullName());
+        }
+
+        if (isNotEmpty(request.getNick())) {
+            user.setNick(request.getNick());
+        }
+
+        if (isNotEmpty(request.getDescription())) {
+            user.setDescription(request.getDescription());
+        }
+
+        return new ResponseEntity<>(new UserControllerResp("User info was successfully updated", userService.save(user)), HttpStatus.OK);
+
+    }
+
+    private boolean isNotEmpty(String param) {
+        return param != null && !param.isEmpty();
     }
 }
