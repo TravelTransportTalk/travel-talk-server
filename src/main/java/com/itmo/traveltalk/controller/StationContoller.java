@@ -1,12 +1,11 @@
 package com.itmo.traveltalk.controller;
 
 import java.util.List;
-import java.util.Set;
 
 import com.itmo.traveltalk.dto.StationShort;
-import com.itmo.traveltalk.entity.RawStation;
 import com.itmo.traveltalk.service.StationService;
 import com.itmo.traveltalk.utils.GlobalConstants;
+import com.itmo.traveltalk.utils.StationsConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class StationContoller {
 
-    private static final Set<String> FEDERAL_CITIES = Set.of(
-            "Москва",
-            "Санкт-Петербург"
-    );
-
     private final StationService stationService;
 
     @GetMapping("")
@@ -31,7 +25,7 @@ public class StationContoller {
         return ResponseEntity.ok(
                 stationService.getAllStations()
                         .stream()
-                        .map(this::convert)
+                        .map(StationsConverter::convert)
                         .toList()
         );
     }
@@ -43,30 +37,9 @@ public class StationContoller {
         return ResponseEntity.ok(
                 stationService.getStationsByTransportType(transportType)
                         .stream()
-                        .map(this::convert)
+                        .map(StationsConverter::convert)
                         .toList()
         );
-    }
-
-    private StationShort convert(RawStation raw) {
-        return new StationShort(
-                raw.getStationYndxCode(),
-                raw.getTransportType(),
-                raw.getTitle(),
-                raw.getTitle() + ", " + constructRegionTitle(raw)
-        );
-    }
-
-    private String constructRegionTitle(RawStation raw) {
-        if (raw.getSettlementTitle() == null) {
-            return raw.getRegionTitle();
-        } else {
-            if (FEDERAL_CITIES.contains(raw.getSettlementTitle())) {
-                return raw.getSettlementTitle();
-            } else {
-                return raw.getSettlementTitle() + ", " + raw.getRegionTitle();
-            }
-        }
     }
 
 
