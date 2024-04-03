@@ -67,4 +67,4 @@ jobs:
             --set image="${{ needs.push.outputs.image }}" \
             travel-talk-server .
         env:
-          WERF_KUBECONFIG_BASE64: ${{ secrets.KUBE_CONFIG_BASE64_DATA }}
+          WERF_KUBECONFIG_BASE64: ${{ secrets.KUBECONFIG_BASE64 }}
