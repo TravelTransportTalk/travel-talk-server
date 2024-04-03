@@ -1,16 +1,13 @@
 package com.itmo.traveltalk.controller;
 
 import com.itmo.traveltalk.dto.AddTripRequest;
-import com.itmo.traveltalk.entity.Location;
-import com.itmo.traveltalk.entity.Transport;
+import com.itmo.traveltalk.dto.AddTripResponse;
+import com.itmo.traveltalk.dto.FindTripResponse;
 import com.itmo.traveltalk.entity.Trip;
-import com.itmo.traveltalk.entity.User;
-import com.itmo.traveltalk.service.LocationService;
-import com.itmo.traveltalk.service.TransportService;
 import com.itmo.traveltalk.service.TripService;
-import com.itmo.traveltalk.service.UserService;
 import com.itmo.traveltalk.utils.GlobalConstants;
 import com.itmo.traveltalk.utils.TripFilter;
+import com.itmo.traveltalk.service.TripRequestConverter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,12 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.OffsetTime;
-import java.util.Date;
-import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -32,52 +24,46 @@ import java.util.List;
 public class TripController {
 
     private final TripService tripService;
-    private final TransportService transportService;
-    private final LocationService locationService;
 
-    private final UserService userService;
+    private final TripRequestConverter tripRequestConverter;
 
-    public TripController(TripService tripService, TransportService transportService, LocationService locationService, UserService userService) {
+    public TripController(TripService tripService, TripRequestConverter tripRequestConverter) {
         this.tripService = tripService;
-        this.transportService = transportService;
-        this.locationService = locationService;
-        this.userService = userService;
+        this.tripRequestConverter = tripRequestConverter;
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Trip> add(@RequestBody AddTripRequest request) throws ParseException {
+    public ResponseEntity<AddTripResponse> add(@RequestBody AddTripRequest request) {
 
-        Location from = locationService.findById(request.getFromId()).get();
-        Location to = locationService.findById(request.getToId()).get();
-        Transport transport = transportService.findById(request.getTransportId()).get();
-        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        Date date = formatter.parse(request.getDate());
-        //for example 10:15:30
-        OffsetTime time = OffsetTime.parse(request.getTime());
-        User author = userService.findById(request.getAuthorId()).get();
+        try {
+            Trip trip = tripRequestConverter.convertRequestToTrip(request);
+            return new ResponseEntity<>(
+                    new AddTripResponse("Trip is succesfully created", tripService.save(trip)),
+                    HttpStatus.OK);
 
-        Trip trip = new Trip(from, to, date, time, request.getCode(), transport, author);
+        } catch (IllegalArgumentException e) {
 
-        return new ResponseEntity<>(
-                tripService.save(trip),
-                HttpStatus.OK);
+            return new ResponseEntity<>(
+                    new AddTripResponse(e.getMessage()),
+                    HttpStatus.BAD_REQUEST);
+
+        }
+
     }
 
     @PostMapping("/find")
-    public ResponseEntity<List<Trip>> find(@RequestBody AddTripRequest request) throws ParseException {
+    public ResponseEntity<FindTripResponse> find(@RequestBody AddTripRequest request) throws ParseException {
 
+        try {
+            TripFilter tripFilter = tripRequestConverter.convertRequestToTripFilter(request);
 
-        Location from = (request.getFromId()!=null) ? locationService.findById(request.getFromId()).get(): null;
-        Location to = (request.getToId()!=null) ?locationService.findById(request.getToId()).get() : null ;
-        Transport transport = (request.getTransportId()!=null) ? transportService.findById(request.getTransportId()).get(): null;
-        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        Date date = (request.getDate() != null) ? formatter.parse(request.getDate()) : null;
-
-
-        TripFilter tripFilter = TripFilter.newBuilder().setDate(date).setCode(request.getCode()).setFrom(from).setTo(to).setTransport(transport).build();
-
-        return new ResponseEntity<>(
-                tripService.findByFilter(tripFilter),
-                HttpStatus.OK);
+            return new ResponseEntity<>(
+                    new FindTripResponse("The followed trips were found by filter: ", tripService.findByFilter(tripFilter)),
+                    HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(
+                    new FindTripResponse(e.getMessage()),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
 }
