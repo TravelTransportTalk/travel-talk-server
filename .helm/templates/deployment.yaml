@@ -14,8 +14,7 @@ spec:
     spec:
       containers:
       - name: tomcat
-        {{- if .Values.werf.image. }}
-        image: {{ .Values.werf.image.app }}
+        image: {{ .Values.image }}
         ports:
           - containerPort: 8080
             name: http

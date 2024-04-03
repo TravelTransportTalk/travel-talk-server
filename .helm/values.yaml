@@ -1,4 +1,5 @@
 ---
+image: ghcr.io/traveltransporttalk/travel-talk-server:latest
 env:
   - name: SPRING_DATASOURCE_USERNAME
     value: "developer"
