@@ -64,7 +64,8 @@ jobs:
             --atomic \
             -f values.yaml \
             --timeout=15m0s \
-            --set image="${{ needs.push.outputs.image }}" \
+            --set image="$IMAGE" \
             travel-talk-server .
         env:
           WERF_KUBECONFIG_BASE64: ${{ secrets.KUBECONFIG_BASE64 }}
+          IMAGE: ${{ needs.build-images.outputs.image }}
