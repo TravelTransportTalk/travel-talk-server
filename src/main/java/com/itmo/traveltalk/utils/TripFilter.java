@@ -1,15 +1,15 @@
 package com.itmo.traveltalk.utils;
 
-import com.itmo.traveltalk.entity.Location;
+import com.itmo.traveltalk.entity.RawStation;
 import com.itmo.traveltalk.entity.Transport;
 
 import java.util.Date;
 
 public class TripFilter {
 
-    private Location from;
+    private RawStation from;
 
-    private Location to;
+    private RawStation to;
 
     private Date date;
 
@@ -19,11 +19,11 @@ public class TripFilter {
 
     private TripFilter(){}
 
-    public Location getFrom() {
+    public RawStation getFrom() {
         return from;
     }
 
-    public Location getTo() {
+    public RawStation getTo() {
         return to;
     }
 
@@ -47,12 +47,12 @@ public class TripFilter {
 
         private Builder(){}
 
-        public Builder setFrom(Location from) {
+        public Builder setFrom(RawStation from) {
             TripFilter.this.from = from;
             return this;
         };
 
-        public Builder setTo(Location to) {
+        public Builder setTo(RawStation to) {
             TripFilter.this.to = to;
             return this;
         };

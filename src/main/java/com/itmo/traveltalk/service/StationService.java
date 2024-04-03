@@ -1,6 +1,7 @@
 package com.itmo.traveltalk.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.itmo.traveltalk.entity.RawStation;
 import com.itmo.traveltalk.repository.StationRepository;
@@ -19,5 +20,9 @@ public class StationService {
 
     public List<RawStation> getStationsByTransportType(String type) {
         return stationRepository.findByTransportType(type);
+    }
+
+    public Optional<RawStation> findById(String id) {
+        return stationRepository.findById(id);
     }
 }

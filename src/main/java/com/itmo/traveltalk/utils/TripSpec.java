@@ -1,6 +1,6 @@
 package com.itmo.traveltalk.utils;
 
-import com.itmo.traveltalk.entity.Location;
+import com.itmo.traveltalk.entity.RawStation;
 import com.itmo.traveltalk.entity.Transport;
 import com.itmo.traveltalk.entity.Trip;
 import org.springframework.data.jpa.domain.Specification;
@@ -32,11 +32,11 @@ public class TripSpec {
         return ((root, query, cb) -> code == null || code.isEmpty() ? cb.conjunction() : cb.equal(root.get(CODE), code));
     }
 
-    private static Specification<Trip> hasFrom(Location from) {
+    private static Specification<Trip> hasFrom(RawStation from) {
         return ((root, query, cb) -> from == null ? cb.conjunction() : cb.equal(root.get(FROM), from));
     }
 
-    private static Specification<Trip> hasTo(Location to) {
+    private static Specification<Trip> hasTo(RawStation to) {
         return ((root, query, cb) -> to == null ? cb.conjunction() : cb.equal(root.get(TO), to));
     }
 

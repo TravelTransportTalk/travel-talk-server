@@ -35,11 +35,11 @@ public class Trip {
 
     @ManyToOne
     @JoinColumn(name = "from_id")
-    private Location from;
+    private RawStation from;
 
     @ManyToOne
     @JoinColumn(name = "to_id")
-    private Location to;
+    private RawStation to;
 
     private Date date;
 
@@ -55,7 +55,7 @@ public class Trip {
     @JoinColumn(name = "user_id")
     private User authorId;
 
-    public Trip(Location from, Location to, Date date, OffsetTime time, String code, Transport transport, User authorId) {
+    public Trip(RawStation from, RawStation to, Date date, OffsetTime time, String code, Transport transport, User authorId) {
         this.from = from;
         this.to = to;
         this.date = date;

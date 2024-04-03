@@ -1,7 +1,7 @@
 package com.itmo.traveltalk.service;
 
 import com.itmo.traveltalk.dto.AddTripRequest;
-import com.itmo.traveltalk.entity.Location;
+import com.itmo.traveltalk.entity.RawStation;
 import com.itmo.traveltalk.entity.Transport;
 import com.itmo.traveltalk.entity.Trip;
 import com.itmo.traveltalk.entity.User;
@@ -20,31 +20,33 @@ import java.util.UUID;
 public class TripRequestConverter {
 
     private final TransportService transportService;
-    private final LocationService locationService;
+    private final StationService stationService;
 
     private final UserService userService;
 
-    public TripRequestConverter(TransportService transportService, LocationService locationService, UserService userService) {
+    public TripRequestConverter(TransportService transportService,
+                                StationService stationService,
+                                UserService userService) {
         this.transportService = transportService;
-        this.locationService = locationService;
+        this.stationService = stationService;
         this.userService = userService;
     }
 
     public  Trip convertRequestToTrip (AddTripRequest request) {
 
-        Location from = null;
-        Location to = null;
+        RawStation from = null;
+        RawStation to = null;
         Transport transport = null;
         User author = null;
         Date date = null;
         OffsetTime time = null;
 
-        if (uuidIsNotNull(request.getFromId())) {
-            from = locationService.findById(request.getFromId()).orElseThrow(() -> new IllegalArgumentException("Location by specified fromId is not found"));
+        if (request.getFromId() != null) {
+            from = stationService.findById(request.getFromId()).orElseThrow(() -> new IllegalArgumentException("Location by specified fromId is not found"));
         }
 
-        if (uuidIsNotNull(request.getToId())) {
-            to = locationService.findById(request.getToId()).orElseThrow(() -> new IllegalArgumentException("Location by specified toId is not found"));
+        if (request.getToId() != null) {
+            to = stationService.findById(request.getToId()).orElseThrow(() -> new IllegalArgumentException("Location by specified toId is not found"));
         }
 
         if (uuidIsNotNull(request.getTransportId())) {
@@ -75,17 +77,17 @@ public class TripRequestConverter {
 
     public TripFilter convertRequestToTripFilter (AddTripRequest request) {
 
-        Location from = null;
-        Location to = null;
+        RawStation from = null;
+        RawStation to = null;
         Transport transport = null;
         Date date = null;
 
-        if (uuidIsNotNull(request.getFromId())) {
-            from = locationService.findById(request.getFromId()).orElseThrow(() -> new IllegalArgumentException("Location by specified fromId is not found"));
+        if (request.getFromId() != null) {
+            from = stationService.findById(request.getFromId()).orElseThrow(() -> new IllegalArgumentException("Location by specified fromId is not found"));
         }
 
-        if (uuidIsNotNull(request.getToId())) {
-            to = locationService.findById(request.getToId()).orElseThrow(() -> new IllegalArgumentException("Location by specified toId is not found"));
+        if (request.getToId() != null) {
+            to = stationService.findById(request.getToId()).orElseThrow(() -> new IllegalArgumentException("Location by specified toId is not found"));
         }
 
         if (uuidIsNotNull(request.getTransportId())) {
