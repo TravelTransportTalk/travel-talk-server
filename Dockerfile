@@ -13,3 +13,5 @@ RUN adduser -DH runner
 ENTRYPOINT ["java"]
 CMD ["-jar", "/app/app.jar"]
 COPY --from=builder --chown=runner /build/target/*.jar /app/app.jar
+
+USER runner
