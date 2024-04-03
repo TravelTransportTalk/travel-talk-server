@@ -1,0 +1,8 @@
+---
+env:
+  - name: SPRING_DATASOURCE_USERNAME
+    value: "developer"
+  - name: SPRING_DATASOURCE_URL
+    value: jdbc:postgresql://travel-talk-postgres:5432/travel_talk
+
+pgSecretName: postgres-secret

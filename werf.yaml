@@ -1,0 +1,10 @@
+---
+configVersion: 1
+project: travel-talk-server
+
+deploy:
+  namespace: travel-talk-[[ env ]]
+---
+image: travel-talk-server
+dockerfile: Dockerfile
+context: .
