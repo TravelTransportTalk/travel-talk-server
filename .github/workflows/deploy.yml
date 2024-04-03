@@ -30,6 +30,8 @@ jobs:
           export IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY_OWNER_PART_SLUG}/${GITHUB_REPOSITORY_NAME_PART_SLUG}:${GITHUB_REF_SLUG}_${GITHUB_SHA:0:6}"
           export IMAGE_NAME_LATEST="ghcr.io/${GITHUB_REPOSITORY_OWNER_PART_SLUG}/${GITHUB_REPOSITORY_NAME_PART_SLUG}:latest"
 
+          docker tag "$IMAGE_NAME" "$IMAGE_NAME_LATEST"
+
           docker push "$IMAGE_NAME"
           docker push "$IMAGE_NAME_LATEST"
 
