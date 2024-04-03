@@ -7,3 +7,12 @@ env:
     value: jdbc:postgresql://travel-talk-postgres:5432/travel_talk
 
 pgSecretName: postgres-secret
+
+ingress:
+  enabled: true
+  tls:
+    enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+  hosts:
+    - travel-talk.mkls.space
