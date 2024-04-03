@@ -1,0 +1,19 @@
+---
+image: ghcr.io/traveltransporttalk/travel-talk-server:latest
+env:
+  - name: SPRING_DATASOURCE_USERNAME
+    value: "developer"
+  - name: SPRING_DATASOURCE_URL
+    value: jdbc:postgresql://travel-talk-postgres:5432/travel_talk
+
+pgSecretName: postgres-secret
+
+ingress:
+  enabled: true
+  className: nginx
+  tls:
+    enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - travel-talk.mkls.space
