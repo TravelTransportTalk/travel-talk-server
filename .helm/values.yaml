@@ -8,6 +8,14 @@ env:
 
 pgSecretName: postgres-secret
 
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
 ingress:
   enabled: true
   className: nginx

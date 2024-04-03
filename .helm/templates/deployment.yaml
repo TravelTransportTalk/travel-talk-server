@@ -18,6 +18,10 @@ spec:
         ports:
           - containerPort: 8080
             name: http
+        {{- if .Values.resources }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        {{- end }}
         env:
           - name: SERVER_PORT
             value: "8080"
