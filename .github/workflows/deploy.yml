@@ -26,6 +26,7 @@ jobs:
           docker build -t "$IMAGE_NAME" --label "runid=${GITHUB_RUN_ID}" .
 
       - name: push
+        id: push
         run: |
           export IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY_OWNER_PART_SLUG}/${GITHUB_REPOSITORY_NAME_PART_SLUG}:${GITHUB_REF_SLUG}_${GITHUB_SHA:0:6}"
           export IMAGE_NAME_LATEST="ghcr.io/${GITHUB_REPOSITORY_OWNER_PART_SLUG}/${GITHUB_REPOSITORY_NAME_PART_SLUG}:latest"
