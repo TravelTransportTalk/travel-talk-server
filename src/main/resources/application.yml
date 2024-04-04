@@ -1,13 +1,20 @@
+---
 server:
   port: 8080
+
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     password: postgres
     url: jdbc:postgresql://localhost:5435/db
     username: postgres
-#  liquibase:
-#    change-log: classpath:db/travel-talk.yml
+    hikari:
+      keepaliveTime: 50000  # ~50 seconds
+      maximumPoolSize: 50
+      idleTimeout: 60000  # 60 seconds
+
+  # liquibase:
+  #   change-log: classpath:db/travel-talk.yml
   jpa:
     database: postgresql
     generate-ddl: true
@@ -19,4 +26,3 @@ spring:
           batch_size: 20
         order_inserts: true
     show-sql: true
-
